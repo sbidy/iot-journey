@@ -26,6 +26,8 @@ namespace Microsoft.Practices.IoTJourney.ColdStorage.ConsoleHost
 
             observableEventListener.LogToConsole();
 
+
+
             Tests.Common.ConsoleHost.RunWithOptionsAsync(new Dictionary<string, Func<CancellationToken, Task>>
             {
                 { "Provision Resources", ProvisionResourcesAsync },
@@ -42,9 +44,22 @@ namespace Microsoft.Practices.IoTJourney.ColdStorage.ConsoleHost
             Console.WriteLine("EventHub name/path: {0}", configuration.EventHubName);
 
             Console.WriteLine("Confirming consumer group: {0}", configuration.ConsumerGroupName);
+
+            try
+            {
             await nsm.CreateConsumerGroupIfNotExistsAsync(
                     eventHubPath: configuration.EventHubName,
                     name: configuration.ConsumerGroupName);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("e.type: {0} \n\t e.msg:{1}", e.GetType(), e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("did i catch anything?");
+            }
 
             Console.WriteLine("Consumer group confirmed");
 
