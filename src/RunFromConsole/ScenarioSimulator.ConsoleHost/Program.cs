@@ -30,6 +30,7 @@ namespace Microsoft.Practices.IoTJourney.ScenarioSimulator.ConsoleHost
             observableEventListener.EnableEvents(ScenarioSimulatorEventSource.Log, configuration.EventLevel);
 
             observableEventListener.LogToConsole();
+            observableEventListener.LogToFlatFile("webjob_iot.log" );
 
             var deviceSimulator = new SimulationProfile("Console", 1, configuration);
 

@@ -11,11 +11,11 @@ Param(
 
 	[ValidateNotNullOrEmpty()]
 	[Parameter (Mandatory = $False)]
-	[String]$StreamAnalyticsSQLJobName = "fabrikamstreamjob01",
+	[String]$StreamAnalyticsSQLJobName = "WebJobstreamjob01",
 
 	[ValidateNotNullOrEmpty()]
 	[Parameter (Mandatory = $False)]
-	[String]$StreamAnalyticsColdStorageJobName = "fabrikamcoldstoragejob02",
+	[String]$StreamAnalyticsColdStorageJobName = "WebJobcoldstoragejob02",
 
 
 	[ValidateNotNullOrEmpty()]
