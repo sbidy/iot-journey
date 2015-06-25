@@ -139,10 +139,13 @@ namespace Microsoft.Practices.IoTJourney.Logging
             WriteEvent(15, scenario, exceptionString);
         }
 
+
+        //LAB: Debug added deviceId, count
+
         [Event(16, Level = EventLevel.Verbose)]
-        public void EventSent(long timeSpanTicks)
+        public void EventSent(long timeSpanTicks, string deviceId, int count)
         {
-            WriteEvent(16, timeSpanTicks);
+            WriteEvent(16, timeSpanTicks,deviceId, count);
         }
 
         [Event(17, Level = EventLevel.Informational)]
@@ -162,5 +165,7 @@ namespace Microsoft.Practices.IoTJourney.Logging
         {
             WriteEvent(19, deviceId, eventCount);
         }
+
+
     }
 }

@@ -31,6 +31,8 @@ namespace Microsoft.Practices.IoTJourney.ScenarioSimulator
             _hostName = hostName;
             _simulatorConfiguration = simulatorConfiguration;
 
+
+            // The instance Count is used when scaling out the simulator
             _devicesPerInstance = simulatorConfiguration.NumberOfDevices / instanceCount;
         }
 
@@ -55,7 +57,7 @@ namespace Microsoft.Practices.IoTJourney.ScenarioSimulator
                 .Subscribe(total => ScenarioSimulatorEventSource.Log.FinalEventCountForAllDevices(total));
 
             _observableTotalCount
-                .Buffer(TimeSpan.FromMinutes(5))
+                .Buffer(TimeSpan.FromSeconds(10))
                 .Scan(0, (total, next) => total + next.Sum())
                 .Subscribe(total => ScenarioSimulatorEventSource.Log.CurrentEventCountForAllDevices(total));
 
@@ -66,6 +68,8 @@ namespace Microsoft.Practices.IoTJourney.ScenarioSimulator
                     // Use the short form of the host or instance name to generate the vehicle ID
                     var deviceId = String.Format("{0}-{1}", ConfigurationHelper.InstanceName, i);
 
+
+                    Console.WriteLine("device # {0}  message factory # {1} ", i, (i % messagingFactories.Length));
                     var eventSender = new EventSender(
                         messagingFactory: messagingFactories[i % messagingFactories.Length],
                         config: _simulatorConfiguration,
@@ -103,7 +107,7 @@ namespace Microsoft.Practices.IoTJourney.ScenarioSimulator
         private static async Task SimulateDeviceAsync(
             string deviceId,
             Func<EventEntry[]> produceEventsForScenario,
-            Func<object, Task<bool>> sendEventsAsync,
+            Func<object, string, int, Task<bool>> sendEventsAsync,
             TimeSpan waitBeforeStarting,
             IObserver<int> totalCount,
             CancellationToken token)

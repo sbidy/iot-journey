@@ -7,6 +7,8 @@ namespace Microsoft.Practices.IoTJourney.ScenarioSimulator
 {
     public interface IEventSender
     {
-        Task<bool> SendAsync(object evt);
+
+        //LAB: Debug
+        Task<bool> SendAsync(object evt, string deviceId, int count);
     }
 }

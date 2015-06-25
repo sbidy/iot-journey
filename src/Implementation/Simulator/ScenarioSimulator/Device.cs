@@ -20,7 +20,8 @@ namespace Microsoft.Practices.IoTJourney.ScenarioSimulator
 
         private readonly IEnumerable<EventEntry> _eventEntries;
 
-        private readonly Func<object, Task<bool>> _sendEventAsync;
+        //LAB Debug added string, int
+        private readonly Func<object, string, int, Task<bool>> _sendEventAsync;
 
         public ISubject<int> ObservableEventCount { get; private set; }
 
@@ -31,7 +32,7 @@ namespace Microsoft.Practices.IoTJourney.ScenarioSimulator
         public Device(
             string deviceId,
             IEnumerable<EventEntry> eventEntries,
-            Func<object, Task<bool>> sendEventAsync)
+            Func<object, string, int, Task<bool>> sendEventAsync)
         {
             _deviceId = deviceId;
             _sendEventAsync = sendEventAsync;
@@ -45,6 +46,10 @@ namespace Microsoft.Practices.IoTJourney.ScenarioSimulator
             var stopwatch = Stopwatch.StartNew();
 
             ScenarioSimulatorEventSource.Log.DeviceStarting(_deviceId);
+
+
+            // LAB debug added count
+            int event_count = 0;
 
             try
             {
@@ -63,11 +68,13 @@ namespace Microsoft.Practices.IoTJourney.ScenarioSimulator
                         entry.ResetElapsedTime();
 
                         var evt = entry.CreateNewEvent(this);
-                        var wasEventSent = await _sendEventAsync(evt);
+                        var wasEventSent = await _sendEventAsync(evt,_deviceId,event_count);
 
                         if (wasEventSent)
                         {
                             ObservableEventCount.OnNext(1);
+                            //debug
+                            event_count++;
                         }
                         else
                         {
